@@ -1,0 +1,77 @@
+<script>
+    function request(method) {
+        return function (url, data) {
+            var request = new XMLHttpRequest();
+            request.open(method, url, true);
+            request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            request.send(JSON.stringify(data));
+        }
+    }
+
+    var post = request('POST')
+    var put = request('PUT')
+    var del = request('DELETE')
+
+    function update_led(led) {
+        post('/updateLed', led)
+    }
+
+    function update_leds(leds) {
+        post('/updateLed', leds)
+    }
+
+    function setColor(rgb) {
+        post('/setColor', rgb)
+    }
+
+    function setRainbow(rgb) {
+        post('/setRainbow', rgb)
+    }
+
+    function update_led_submit() {
+        update_led({
+            idx: Number(document.getElementById('idx').value),
+            r: Number(document.getElementById('r').value),
+            b: Number(document.getElementById('b').value),
+            g: Number(document.getElementById('g').value),
+        })
+    }
+
+    function solid_submit() {
+        setColor({
+            r: Number(document.getElementById('r').value),
+            b: Number(document.getElementById('b').value),
+            g: Number(document.getElementById('g').value)
+        })
+    }
+
+    function rainbow_submit() {
+        setRainbow({
+            r: Number(document.getElementById('r').value),
+            b: Number(document.getElementById('b').value),
+            g: Number(document.getElementById('g').value)
+        })
+    }
+
+function reset_strip() {
+    setColor({
+        r: 0, g: 0, b: 0
+    })
+}
+
+function next_pattern() {
+    post('/nextPattern')
+}
+
+</script>
+
+<span>idx: </span><input type="number" min="0" max="255" id="idx" value="10" /><br />
+<span>r: </span><input type="number" min="0" max="255" id="r" value="255" /><br />
+<span>g: </span><input type="number" min="0" max="255" id="g" value="0" /><br />
+<span>b: </span><input type="number" min="0" max="255" id="b" value="0" /><br />
+<br />
+<button onclick="update_led_submit()">update_led_submit()</button>
+<button onclick="solid_submit()">solid_submit()</button>
+<button onclick="rainbow_submit()">rainbow_submit()</button>
+<button onclick="reset_strip()">reset_strip()</button>
+<button onclick="next_pattern()">next_pattern()</button>
